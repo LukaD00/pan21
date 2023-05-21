@@ -2,7 +2,14 @@ import os
 import json
 from collections import namedtuple
 
-Instance = namedtuple("Instance", ["Text", "MultiAuthor", "Changes", "ParagraphAuthors"])
+class Instance:
+
+    def __init__(self, text, multi_author, changes, paragraph_authors):
+        self.text = text
+        self.multi_author = multi_author
+        self.changes = changes
+        self.paragraph_authors = paragraph_authors
+        
 
 class Dataset:
 

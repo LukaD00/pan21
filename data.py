@@ -33,8 +33,11 @@ class Dataset:
 
                 self.instances.append(Instance(text, multi_author, changes, paragraph_authors))
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx) -> Instance:
         return self.instances[idx]
+    
+    def __len__(self):
+        return len(self.instances)
 
 
 if __name__=="__main__":

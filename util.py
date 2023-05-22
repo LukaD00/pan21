@@ -33,6 +33,9 @@ def split_into_sentences(text):
     text = text.replace("!","!<stop>")
     text = text.replace("<prd>",".")
     sentences = text.split("<stop>")
-    sentences = sentences[:-1]
     sentences = [s.strip() for s in sentences]
+    sentences = [s for s in sentences if s!='']
     return sentences
+
+if __name__=="__main__":
+    print(split_into_sentences("First sentence. Second sentence:"))

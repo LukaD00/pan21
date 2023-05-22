@@ -23,6 +23,9 @@ def train(dataset):
     for i, instance in enumerate(dataset):
         document = instance.text
 
+        if i == 197:
+            pass
+
         document_embeddings = torch.zeros(768)
 
         if torch.cuda.is_available():
@@ -69,30 +72,37 @@ def train(dataset):
 
         paragraphs_embeddings = torch.stack(paragraphs_embeddings, dim=0)
         document_embeddings = document_embeddings/sentence_count
-        document_embeddings = document_embeddings.unsqueeze(0)
+        #document_embeddings = document_embeddings.unsqueeze(0)
 
         if torch.cuda.is_available():
             document_embeddings = document_embeddings.cpu()
             paragraphs_embeddings = paragraphs_embeddings.cpu()
 
-        X_docu.append(document_embeddings)
+        if torch.isnan(document_embeddings).any():
+            print("NaN detected in document")
+
+        X_docu.append(document_embeddings.numpy())
         y_docu.append(instance.multi_author)
 
-        X_para.extend(paragraphs_embeddings)
+        if torch.isnan(paragraphs_embeddings).any():
+            print("NaN detected in paragraph")
+
+        X_para.extend(paragraphs_embeddings.numpy())
         y_para.extend(instance.changes)
 
         if i % 10 == 0:
             print(f"{i}/{len(dataset)}, time elapsed: {(time.time() - time_start)/60} min")
 
+
     print("Training docu classifier")
     clf_docu = RandomForestClassifier()
     clf_docu.fit(X_docu, y_docu)
-    joblib.dump(clf_docu, "Docu_2.joblib")
+    joblib.dump(clf_docu, "weights/Docu.joblib")
 
     print("Training para classifier")
     clf_para = RandomForestClassifier()
     clf_para.fit(X_para, y_para)
-    joblib.dump(clf_para, "Para_2.joblib")
+    joblib.dump(clf_para, "weights/Para.joblib")
 
     
 

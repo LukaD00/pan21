@@ -7,7 +7,7 @@ from generate_embeddings import BertEmbeddings
 from data import Dataset
 from sklearn.ensemble import RandomForestClassifier
 
-def train(dataset):
+def train(dataset, calculate_embeddings=True):
 
     embeddings = BertEmbeddings()
     print("Loaded BERT")
@@ -34,6 +34,8 @@ def train(dataset):
         sentence_count = 0
         paragraphs_embeddings = []
         paragraphs = document.split('\n')
+        if paragraphs[-1].strip() == "":
+            paragraphs = paragraphs[:-1]
 
         previous_para_embeddings = None
         previous_para_length = None
@@ -79,13 +81,13 @@ def train(dataset):
             paragraphs_embeddings = paragraphs_embeddings.cpu()
 
         if torch.isnan(document_embeddings).any():
-            print("NaN detected in document")
+            print("WARNING: NaN detected in document")
 
         X_docu.append(document_embeddings.numpy())
         y_docu.append(instance.multi_author)
 
         if torch.isnan(paragraphs_embeddings).any():
-            print("NaN detected in paragraph")
+            print("WARNING: NaN detected in paragraph")
 
         X_para.extend(paragraphs_embeddings.numpy())
         y_para.extend(instance.changes)
@@ -93,16 +95,18 @@ def train(dataset):
         if i % 10 == 0:
             print(f"{i}/{len(dataset)}, time elapsed: {(time.time() - time_start)/60} min")
 
+    joblib.dump(document_embeddings, "weights/DocuEmbeddings.joblib")
+    joblib.dump(paragraphs_embeddings, "weights/ParaEmbeddings.joblib")    
 
     print("Training docu classifier")
-    clf_docu = RandomForestClassifier()
+    clf_docu = RandomForestClassifier(n_estimators=1800, criterion="gini", min_samples_leaf=1, min_samples_split=2)
     clf_docu.fit(X_docu, y_docu)
-    joblib.dump(clf_docu, "weights/Docu.joblib")
+    joblib.dump(clf_docu, "weights/Docu2.joblib")
 
     print("Training para classifier")
-    clf_para = RandomForestClassifier()
+    clf_para = RandomForestClassifier(n_estimators=250, criterion="gini", min_samples_leaf=1, min_samples_split=2)
     clf_para.fit(X_para, y_para)
-    joblib.dump(clf_para, "weights/Para.joblib")
+    joblib.dump(clf_para, "weights/Para2.joblib")
 
     
 
@@ -111,4 +115,4 @@ if __name__=="__main__":
 
     dataset = Dataset(input_path)
 
-    train(dataset)
+    train(dataset, calculate_embeddings=False)

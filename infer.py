@@ -11,10 +11,10 @@ def infer(corpora, inputpath, outputpath):
 
     embeddings = BertEmbeddings()
 
-    with open('weights/Docu.joblib', 'rb') as file_handle:
+    with open('weights/Docu2.joblib', 'rb') as file_handle:
         clf_docu = joblib.load(file_handle)
 
-    with open('weights/Para.joblib', 'rb') as file_handle:
+    with open('weights/Para2.joblib', 'rb') as file_handle:
         clf_para = joblib.load(file_handle)
 
     for document_path in corpora:

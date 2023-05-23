@@ -4,11 +4,12 @@ from collections import namedtuple
 
 class Instance:
 
-    def __init__(self, text, multi_author, changes, paragraph_authors):
+    def __init__(self, text, multi_author, changes, paragraph_authors, id):
         self.text = text
         self.multi_author = multi_author
         self.changes = changes
         self.paragraph_authors = paragraph_authors
+        self.id = id
         
 
 class Dataset:
@@ -31,7 +32,7 @@ class Dataset:
                     changes = data["changes"]
                     paragraph_authors = data["paragraph-authors"]
 
-                self.instances.append(Instance(text, multi_author, changes, paragraph_authors))
+                self.instances.append(Instance(text, multi_author, changes, paragraph_authors, id))
 
     def __getitem__(self, idx) -> Instance:
         return self.instances[idx]

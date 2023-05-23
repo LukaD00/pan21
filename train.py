@@ -1,102 +1,30 @@
-import torch
-import time
 import joblib
 
-from util import split_into_sentences
 from generate_embeddings import BertEmbeddings
 from data import Dataset
 from sklearn.ensemble import RandomForestClassifier
 
 def train(dataset, calculate_embeddings=True):
 
-    embeddings = BertEmbeddings()
-    print("Loaded BERT")
+    if calculate_embeddings:
+        embeddings = BertEmbeddings()
+        print("Loaded BERT")
+        X_docu, y_docu, X_para, y_para = embeddings.generate_docu_para_embeddings(dataset)
+    
+        joblib.dump(X_docu, "weights/X_docu_train.joblib")
+        joblib.dump(y_docu, "weights/y_docu_train.joblib")
+        joblib.dump(X_para, "weights/X_para_train.joblib") 
+        joblib.dump(y_para, "weights/y_para_train.joblib")
 
-    X_docu = []
-    y_docu = []    
-
-    X_para = []
-    y_para = []
-
-    time_start = time.time()
-
-    for i, instance in enumerate(dataset):
-        document = instance.text
-
-        if i == 197:
-            pass
-
-        document_embeddings = torch.zeros(768)
-
-        if torch.cuda.is_available():
-            document_embeddings = document_embeddings.cuda()
-
-        sentence_count = 0
-        paragraphs_embeddings = []
-        paragraphs = document.split('\n')
-        if paragraphs[-1].strip() == "":
-            paragraphs = paragraphs[:-1]
-
-        previous_para_embeddings = None
-        previous_para_length = None
-
-        for paragraph_index, paragraph in enumerate(paragraphs):
-            sentences = split_into_sentences(paragraph)
-
-            current_para_embeddings = torch.zeros(768)
-            if torch.cuda.is_available():
-                current_para_embeddings = current_para_embeddings.cuda()
-
-            current_para_length = len(sentences)
-
-            for sentence in sentences:
-                sentence_count += 1
-                sentence_embedding = embeddings.generate_sentence_embedding(sentence)
-                current_para_embeddings.add_(sentence_embedding)
-                document_embeddings.add_(sentence_embedding)
-                del sentence_embedding, sentence
-
-            if previous_para_embeddings is not None:
-                two_para_lengths = previous_para_length + current_para_length
-                two_para_embeddings = (
-                    previous_para_embeddings + current_para_embeddings)/two_para_lengths
-
-                paragraphs_embeddings.append(two_para_embeddings)
-
-            previous_para_embeddings = current_para_embeddings
-            previous_para_length = current_para_length
-            del sentences
-            del paragraph
-
-        del previous_para_embeddings, previous_para_length
-        del current_para_embeddings, current_para_length
-        del two_para_embeddings
-
-        paragraphs_embeddings = torch.stack(paragraphs_embeddings, dim=0)
-        document_embeddings = document_embeddings/sentence_count
-        #document_embeddings = document_embeddings.unsqueeze(0)
-
-        if torch.cuda.is_available():
-            document_embeddings = document_embeddings.cpu()
-            paragraphs_embeddings = paragraphs_embeddings.cpu()
-
-        if torch.isnan(document_embeddings).any():
-            print("WARNING: NaN detected in document")
-
-        X_docu.append(document_embeddings.numpy())
-        y_docu.append(instance.multi_author)
-
-        if torch.isnan(paragraphs_embeddings).any():
-            print("WARNING: NaN detected in paragraph")
-
-        X_para.extend(paragraphs_embeddings.numpy())
-        y_para.extend(instance.changes)
-
-        if i % 10 == 0:
-            print(f"{i}/{len(dataset)}, time elapsed: {(time.time() - time_start)/60} min")
-
-    joblib.dump(document_embeddings, "weights/DocuEmbeddings.joblib")
-    joblib.dump(paragraphs_embeddings, "weights/ParaEmbeddings.joblib")    
+    else:
+        with open('weights/X_docu_train.joblib', 'rb') as file_handle:
+            X_docu = joblib.load(file_handle)
+        with open('weights/y_docu_train.joblib', 'rb') as file_handle:
+            y_docu = joblib.load(file_handle)
+        with open('weights/X_para_train.joblib', 'rb') as file_handle:
+            X_para = joblib.load(file_handle)
+        with open('weights/y_para_train.joblib', 'rb') as file_handle:
+            y_para = joblib.load(file_handle)
 
     print("Training docu classifier")
     clf_docu = RandomForestClassifier(n_estimators=1800, criterion="gini", min_samples_leaf=1, min_samples_split=2)

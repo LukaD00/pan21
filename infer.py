@@ -7,17 +7,17 @@ import glob
 from util import split_into_sentences
 from generate_embeddings import BertEmbeddings
 
-def infer(corpora, inputpath, outputpath):
+def infer(corpora, inputpath, outputpath, clf_docu_save_path, clf_para_save_path):
 
     embeddings = BertEmbeddings()
 
-    with open('weights/Docu2.joblib', 'rb') as file_handle:
+    with open(clf_docu_save_path, 'rb') as file_handle:
         clf_docu = joblib.load(file_handle)
 
-    with open('weights/Para2.joblib', 'rb') as file_handle:
+    with open(clf_para_save_path, 'rb') as file_handle:
         clf_para = joblib.load(file_handle)
 
-    for document_path in corpora:
+    for i, document_path in enumerate(corpora):
         with open(document_path, encoding="utf8") as file:
             document = file.read()
         document_id = document_path[len(inputpath)+9:-4]
@@ -99,7 +99,7 @@ def infer(corpora, inputpath, outputpath):
         file_name = outputpath+'/solution-problem-'+document_id+'.json'
         with open(file_name, 'w') as file_handle:
             json.dump(solution, file_handle, default=myconverter)
-        print(f"Solved {document_id}: {solution}")
+        print(f"{i}/{len(corpora)} Solved {document_id}: {solution}")
 
         del document_embeddings, document_label
         del paragraphs_embeddings, paragraphs_labels
@@ -122,7 +122,8 @@ def myconverter(obj):
 if __name__=="__main__":
     input_path= 'data/validation'
     output_path = 'out' 
+    clf_docu_save_path = "weights/DocuNN1.joblib"
+    clf_para_save_path = "weights/ParaNN1.joblib"
 
     dataset = glob.glob(input_path+'/*.txt')
-
-    infer(dataset, input_path, output_path)
+    infer(dataset, input_path, output_path, clf_docu_save_path, clf_para_save_path)

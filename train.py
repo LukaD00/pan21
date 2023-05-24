@@ -3,8 +3,9 @@ import joblib
 from generate_embeddings import BertEmbeddings
 from data import Dataset
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 
-def train(dataset, calculate_embeddings=True):
+def train(dataset, clf_docu_save_path, clf_para_save_path, calculate_embeddings=True):
 
     if calculate_embeddings:
         embeddings = BertEmbeddings()
@@ -27,20 +28,23 @@ def train(dataset, calculate_embeddings=True):
             y_para = joblib.load(file_handle)
 
     print("Training docu classifier")
-    clf_docu = RandomForestClassifier(n_estimators=1800, criterion="gini", min_samples_leaf=1, min_samples_split=2)
+    #clf_docu = RandomForestClassifier(n_estimators=1800, criterion="gini", min_samples_leaf=1, min_samples_split=2)
+    clf_docu = MLPClassifier([50, 10])
     clf_docu.fit(X_docu, y_docu)
-    joblib.dump(clf_docu, "weights/Docu2.joblib")
+    joblib.dump(clf_docu, clf_docu_save_path)
 
     print("Training para classifier")
-    clf_para = RandomForestClassifier(n_estimators=250, criterion="gini", min_samples_leaf=1, min_samples_split=2)
+    #clf_para = RandomForestClassifier(n_estimators=250, criterion="gini", min_samples_leaf=1, min_samples_split=2)
+    clf_para = MLPClassifier([50, 10])
     clf_para.fit(X_para, y_para)
-    joblib.dump(clf_para, "weights/Para2.joblib")
+    joblib.dump(clf_para, clf_para_save_path)
 
     
 
 if __name__=="__main__":
-    input_path= 'data/train/'
+    input_path= "data/train/"
+    clf_docu_save_path = "weights/Docu.joblib"
+    clf_para_save_path = "weights/Para.joblib"
 
     dataset = Dataset(input_path)
-
-    train(dataset, calculate_embeddings=False)
+    train(dataset, clf_docu_save_path, clf_para_save_path, calculate_embeddings=True)

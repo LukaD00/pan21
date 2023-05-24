@@ -88,9 +88,9 @@ def write_output(filename, k, v):
 
 def main():
     parser = argparse.ArgumentParser(description='PAN21 Style Change Detection Task: Evaluator')
-    parser.add_argument("-p", "--predictions", help="path to the dir holding the predictions", required=True)
-    parser.add_argument("-t", "--truth", help="path to the dir holding the true labels", required=True)
-    parser.add_argument("-o", "--output", help="path to the dir to write the results to", required=True)
+    parser.add_argument("-p", "--predictions", help="path to the dir holding the predictions", default="out")
+    parser.add_argument("-t", "--truth", help="path to the dir holding the true labels", default="data/validation")
+    parser.add_argument("-o", "--output", help="path to the dir to write the results to", default="eval")
     args = parser.parse_args()
 
     solutions= read_solution_files(args.predictions)

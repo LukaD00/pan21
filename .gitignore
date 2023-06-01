@@ -3,3 +3,5 @@
 /out/*
 /weights/*
 /eval/*
+/classifiers/*
+/features/*

@@ -4,6 +4,7 @@ import json
 import joblib
 
 from features import DocumentFeatures, ParagraphFeatures
+from features import DocumentBertEmbeddings, ParagraphBertEmbeddings
 
 class Instance:
 
@@ -46,14 +47,16 @@ class RawDataset:
 class DocumentFeaturesDataset:
 
     def __init__(self, document_feature_extractor : DocumentFeatures, path="data/train/"):
+        print("Loading Document features...")
+
         self.raw_dataset = RawDataset(path)
         self.instances = []
         self.ids = []
         self.X = []
         self.y = []
 
-        for raw_instance in self.raw_dataset:
-            
+        for i, raw_instance in enumerate(self.raw_dataset):
+
             instance = Instance(
                 document_feature_extractor.extract(raw_instance.data),
                 raw_instance.multi_author,
@@ -66,6 +69,8 @@ class DocumentFeaturesDataset:
             self.ids.append(instance.id)
             self.X.append(instance.data)
             self.y.append(instance.multi_author)
+
+            if i % 50 == 0: print(f"\t{i} / {len(self.raw_dataset)}")
 
     def __getitem__(self, idx) -> Instance:
         return self.instances[idx]
@@ -83,27 +88,31 @@ class DocumentFeaturesDataset:
 
 class ParagraphFeaturesDataset:
 
-    def __init__(self, document_feature_extractor : ParagraphFeatures, path="data/train/"):
+    def __init__(self, paragraph_feature_extractor : ParagraphFeatures, path="data/train/"):
+        print("Loading Paragraph features...")
+
         self.raw_dataset = RawDataset(path)
         self.instances = []
         self.ids = []
         self.X = []
         self.y = []
 
-        for raw_instance in self.raw_dataset:
-            
+        for i, raw_instance in enumerate(self.raw_dataset):
+
             instance = Instance(
-                document_feature_extractor.extract(raw_instance.data),
+                paragraph_feature_extractor.extract(raw_instance.data),
                 raw_instance.multi_author,
                 raw_instance.changes,
                 raw_instance.paragraph_authors,
                 raw_instance.id
             )
-            
+
             self.instances.append(instance)
-            self.ids.append(instance.id)
-            self.X.append(instance.data)
-            self.y.append(instance.multi_author)
+            for _ in range(len(instance.data)): self.ids.append(instance.id)
+            self.X.extend(instance.data)
+            self.y.extend(instance.changes)
+
+            if i % 50 == 0: print(f"\t{i} / {len(self.raw_dataset)}")
 
     def __getitem__(self, idx) -> Instance:
         return self.instances[idx]
@@ -121,5 +130,6 @@ class ParagraphFeaturesDataset:
 
 
 if __name__=="__main__":
-    dataset = RawDataset()
-    print(dataset[0])
+    featureExtractor = ParagraphBertEmbeddings()
+    dataset = ParagraphFeaturesDataset(featureExtractor, path="data/validation/")
+    dataset.save("features/Para_val_bert.joblib")

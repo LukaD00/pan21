@@ -1,0 +1,14 @@
+Docu_Bert_RF_1800
+    RandomForestClassifier(1800)
+    F1 - 0.5889
+
+Docu_Bert_NN_1
+    MLPClassifier([50,10])
+    F1 - 0.7005
+
+
+-------------------
+
+Para_Bert_NN_1
+    MLPClassifier([50,10])
+    F1 - 0.6017

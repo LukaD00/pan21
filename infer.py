@@ -43,4 +43,3 @@ if __name__=="__main__":
         file_name = output_path+'solution-problem-'+id+'.json'
         with open(file_name, 'w') as file_handle:
             json.dump(solutions[id], file_handle, default=myconverter)
-

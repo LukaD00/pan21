@@ -1,3 +1,5 @@
+==TASK1==
+
 Docu_Bert_RF_1800
     RandomForestClassifier(1800)
     F1 - 0.5889
@@ -6,9 +8,40 @@ Docu_Bert_NN_1
     MLPClassifier([50,10])
     F1 - 0.7005
 
+Docu_Bert_NN_2
+    MLPClassifier([50,20,10])
+    F1 - 0.7081
 
 -------------------
+
+==TASK2==
 
 Para_Bert_NN_1
     MLPClassifier([50,10])
     F1 - 0.6017
+
+Para_Bert_NN_2
+    MLPClassifier([50,20,10])
+    F1 - 0.6141
+
+--
+    MLPClassifier([70,25,10], max_iter=300)
+    F1 - 0.5908
+
+Para_Bert_NN_3
+    MLPClassifier([50,10,10], max_iter=300)
+    F1 - 0.6294
+
+
+==TASK3==
+
+Task2 -> Task3
+
+    Para_Bert_NN_3 -> KMeans(n_clusters=k, n_init=5), silhoutte score
+        F1 - 0.2703
+
+    Para_Bert_NN_3 -> AgglomerativeClustering(n_clusters=k), silhoutte score
+        F1 - 0.2689
+
+    Para_Bert_NN_3 -> PCA(n_components=2) -> AgglomerativeClustering(n_clusters=k), silhoutte score
+        F1 - 0.2847

@@ -49,6 +49,13 @@ def sort_group_names(grouping):
             current += 1
     return [mapping[x] for x in grouping]
 
+
+def clusters_to_changes(grouping):
+    changes = []
+    for i in range(len(grouping)-1):
+        changes.append(grouping[i] == grouping[i+1])
+    return changes
+
 if __name__=="__main__":
     grouping = [1,1,5,5,3,2,1,5]
     print(sort_group_names(grouping))

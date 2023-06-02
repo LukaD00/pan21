@@ -40,8 +40,23 @@ Task2 -> Task3
     Para_Bert_NN_3 -> KMeans(n_clusters=k, n_init=5), silhoutte score
         F1 - 0.2703
 
+    Para_Bert_NN_3 -> PCA(n_components=2) -> KMeans(n_clusters=k, n_init=5), silhoutte score
+        F1 - 0.2876
+
     Para_Bert_NN_3 -> AgglomerativeClustering(n_clusters=k), silhoutte score
         F1 - 0.2689
 
     Para_Bert_NN_3 -> PCA(n_components=2) -> AgglomerativeClustering(n_clusters=k), silhoutte score
         F1 - 0.2847
+
+
+
+Task3 -> Task2
+
+    Para_Bert_NN_3 -> PPCA(n_components=len(paragraphs_embeddings)) -> KMeans(n_clusters=k, n_init=5), silhoutte score
+        task2 F1 - 0.5484
+        task3 F1 - 0.2676
+
+    Para_Bert_NN_3 -> PPCA(n_components=len(2)) -> KMeans(n_clusters=k, n_init=5), silhoutte score
+        task2 F1 - 0.5360
+        task3 F1 - 0.2989

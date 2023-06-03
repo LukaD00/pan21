@@ -37,5 +37,25 @@ def split_into_sentences(text):
     sentences = [s for s in sentences if s!='']
     return sentences
 
+
+def sort_group_names(grouping):
+    mapping = {}
+    occured = []
+    current = 1
+    for x in grouping:
+        if x not in occured:
+            occured.append(x)
+            mapping[x] = current
+            current += 1
+    return [mapping[x] for x in grouping]
+
+
+def clusters_to_changes(grouping):
+    changes = []
+    for i in range(len(grouping)-1):
+        changes.append(grouping[i] == grouping[i+1])
+    return changes
+
 if __name__=="__main__":
-    print(split_into_sentences("First sentence. Second sentence:"))
+    grouping = [1,1,5,5,3,2,1,5]
+    print(sort_group_names(grouping))

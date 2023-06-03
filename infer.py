@@ -21,8 +21,8 @@ if __name__=="__main__":
     dataset_docu = DocumentFeaturesDataset.load("features/Docu_val_bert.joblib")
     dataset_para = DocumentFeaturesDataset.load("features/Para_val_bert.joblib")
 
-    classifier_docu = joblib.load("classifiers/Docu_Bert_NN_1.joblib")
-    classifier_para = joblib.load("classifiers/Para_Bert_NN_1.joblib")
+    classifier_docu = joblib.load("classifiers/Docu_Bert_NN_4.joblib")
+    classifier_para = joblib.load("classifiers/Para_Bert_NN_5.joblib")
 
     solutions = {}
 

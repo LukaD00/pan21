@@ -12,6 +12,14 @@ Docu_Bert_NN_2
     MLPClassifier([50,20,10])
     F1 - 0.7081
 
+Docu_Bert_NN_3
+    MLPClassifier([50,10,10], max_iter=300, alpha=0.001, batch_size=32)
+    F1 - 0.6878
+
+Docu_Bert_NN_4
+    MLPClassifier([50,20,10], max_iter=200, alpha=0.0001, batch_size=32, verbose=True)
+    F1 - 0.6992
+
 -------------------
 
 ==TASK2==
@@ -32,6 +40,13 @@ Para_Bert_NN_3
     MLPClassifier([50,10,10], max_iter=300)
     F1 - 0.6294
 
+Para_Bert_NN_4
+    classifier = MLPClassifier([50,10,10], max_iter=300, alpha=0.001, batch_size=32, verbose=True)
+    F1 - 0.6330
+
+Para_Bert_NN_5
+    MLPClassifier([50,10,10], max_iter=300, alpha=0.001, batch_size=32, verbose=True)
+    F1 - 0.6382
 
 ==TASK3==
 
@@ -57,6 +72,14 @@ Task3 -> Task2
         task2 F1 - 0.5484
         task3 F1 - 0.2676
 
-    Para_Bert_NN_3 -> PPCA(n_components=len(2)) -> KMeans(n_clusters=k, n_init=5), silhoutte score
+    Para_Bert_NN_3 -> PCA(n_components=2) -> KMeans(n_clusters=k, n_init=5), silhoutte score
         task2 F1 - 0.5360
         task3 F1 - 0.2989
+
+    Para_Bert_NN_3 -> AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="average"), silhoutte score
+        task2 F1 - 0.4980
+        task3 F1 - 0.3419
+
+    Para_Bert_NN_3 -> AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="single"), silhoutte score
+        task2 F1 - 0.4980
+        task3 F1 - 0.3342

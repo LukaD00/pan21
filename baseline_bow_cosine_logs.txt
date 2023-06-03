@@ -1,0 +1,79 @@
+threshold: 0.2
+measure{
+  key: "task1_score"
+  value: "0.20062193598125155"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.3172019570798818"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.17647399077714063"
+}
+
+threshold:0.8
+measure{
+  key: "task1_score"
+  value: "0.5236093596749334"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.4696586510698785"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.2697218938560415"
+}
+
+threshold:0.9
+measure{
+  key: "task1_score"
+  value: "0.5370853349640452"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.484671892578045"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.31457989012550563"
+}
+
+threshold:0.95
+measure{
+  key: "task1_score"
+  value: "0.4337085461398115"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.3643410263211304"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.27071863455565137"
+}
+
+threshold:0.85
+measure{
+  key: "task1_score"
+  value: "0.6055555555555556"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5307675910051615"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.3180350319144765"
+}

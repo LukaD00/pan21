@@ -1,0 +1,17 @@
+bm25
+
+threshold:0.5
+measure{
+  key: "task1_score"
+  value: "0.2646709902283828"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.3431134236006004"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.1900854329620451"
+}

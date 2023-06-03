@@ -1,0 +1,161 @@
+tf idf
+
+threshold:0.85
+measure{
+  key: "task1_score"
+  value: "0.42857142857142855"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.3508198597249017"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.2639309555496586"
+}
+
+threshold:0.7
+measure{
+  key: "task1_score"
+  value: "0.42857142857142855"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.351324182952379"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.26410184821974947"
+}
+
+threshold:0.6
+measure{
+  key: "task1_score"
+  value: "0.4303373871997889"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.352834737307553"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.26416994101612673"
+}
+
+threshold:0.5
+measure{
+  key: "task1_score"
+  value: "0.4356024974905144"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.3581135668006601"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.26631994291031696"
+}
+
+threshold:0.4
+measure{
+  key: "task1_score"
+  value: "0.44410970695254115"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.3773501621229486"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.27421842705468336"
+}
+
+threshold:0.3
+measure{
+  key: "task1_score"
+  value: "0.46914198750366287"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.44463986849003"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.3047182394121394"
+}
+
+threshold:0.2
+measure{
+  key: "task1_score"
+  value: "0.5778894472361809"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5614203612039691"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.3649974434863395"
+}
+
+threshold:0.175
+measure{
+  key: "task1_score"
+  value: "0.6191962476050336"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5731503928503258"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.3681798938458629"
+}
+
+threshold:0.15
+measure{
+  key: "task1_score"
+  value: "0.6246017197312272"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5679486700336922"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.34875557096923926"
+}
+
+threshold:0.1
+measure{
+  key: "task1_score"
+  value: "0.5393493994473056"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5010318827542093"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.27379215735946766"
+}

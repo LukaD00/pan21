@@ -1,0 +1,33 @@
+euc
+
+threshold:0.1
+measure{
+  key: "task1_score"
+  value: "0.4372553662715382"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5182886088971361"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.351592465526697"
+}
+
+0.05
+measure{
+  key: "task1_score"
+  value: "0.509492490873785"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5283621068704352"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.30535184820832556"
+}

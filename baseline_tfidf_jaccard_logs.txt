@@ -1,0 +1,65 @@
+tfidf jaccard score
+
+threshold:0.05
+measure{
+  key: "task1_score"
+  value: "0.34885079917831174"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.39102296050882523"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.21247571961990316"
+}
+
+threshold:0.1
+measure{
+  key: "task1_score"
+  value: "0.6201424289295712"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5635053687170992"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.3489125914552803"
+}
+
+threshold:0.15
+measure{
+  key: "task1_score"
+  value: "0.5277993723186778"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.5344417145856184"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.35611552274198477"
+}
+
+threshold:0.2
+measure{
+  key: "task1_score"
+  value: "0.45245958630279853"
+}
+
+measure{
+  key: "task2_score"
+  value: "0.4278726585916975"
+}
+
+measure{
+  key: "task3_score"
+  value: "0.2972820898682626"
+}

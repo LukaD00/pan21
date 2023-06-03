@@ -77,12 +77,3 @@ class BaselineClassifier():
 
         return predicted_authorship
 
-        # print(predicted_authorship)
-        #
-        # for i, author in enumerate(predicted_authorship):
-        #     print(f"Paragraph {i + 1} has author: {author}")
-
-# document = "The quick brown fox jumps over the lazy dog.\nThe lazy dog is brown.\nThe quick fox jumps over the lazy " \
-#              "dog.\nThe brown dog is lazy.\nThe fox jumps over the dog."
-
-

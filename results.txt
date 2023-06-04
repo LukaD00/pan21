@@ -4,11 +4,31 @@ Docu_Bert_RF_1800
     RandomForestClassifier(1800)
     F1 - 0.5889
 
+Docu_Bert_RF_800
+    RandomForestClassifier(800)
+    F1 - 0.5877
+
+Docu_Bert_RF_800
+    RandomForestClassifier(800)
+    F1 - 0.5814
+
+Docu_Bert_SVM_1
+    make_pipeline(StandardScaler(), SVC(gamma='auto'))
+    F1 - 0.6382
+
+Docu_Bert_SVM_2
+    make_pipeline(StandardScaler(), SVC(gamma='auto', C=10))
+    F1 - 0.7090
+
+Docu_Bert_SVM_3
+    make_pipeline(StandardScaler(), SVC(gamma='auto', C=15))
+    F1 - 0.7052
+
 Docu_Bert_NN_1
     MLPClassifier([50,10])
     F1 - 0.7005
 
-Docu_Bert_NN_2
+Docu_Bert_NN_5  +++++++++++++
     MLPClassifier([50,20,10])
     F1 - 0.7081
 
@@ -16,13 +36,21 @@ Docu_Bert_NN_3
     MLPClassifier([50,10,10], max_iter=300, alpha=0.001, batch_size=32)
     F1 - 0.6878
 
-Docu_Bert_NN_4
+-
     MLPClassifier([50,20,10], max_iter=200, alpha=0.0001, batch_size=32, verbose=True)
     F1 - 0.6992
 
 -------------------
 
 ==TASK2==
+
+Para_Bert_RF_800
+    RandomForestClassifier(800)
+    F1 - 0.5984
+
+Para_Bert_RF_1800
+    RandomForestClassifier(1800)
+    F1 - 0.6039
 
 Para_Bert_NN_1
     MLPClassifier([50,10])
@@ -44,9 +72,18 @@ Para_Bert_NN_4
     classifier = MLPClassifier([50,10,10], max_iter=300, alpha=0.001, batch_size=32, verbose=True)
     F1 - 0.6330
 
-Para_Bert_NN_5
+Para_Bert_NN_5 +++++++++++++
     MLPClassifier([50,10,10], max_iter=300, alpha=0.001, batch_size=32, verbose=True)
     F1 - 0.6382
+
+
+Para_Bert_SVM_1
+    make_pipeline(StandardScaler(), SVC(gamma='auto'))
+    F1 - 0.6211
+
+Para_Bert_SVM_2
+    make_pipeline(StandardScaler(), SVC(gamma='auto'))
+    F1 - 0.6262
 
 ==TASK3==
 
@@ -68,18 +105,42 @@ Task2 -> Task3
 
 Task3 -> Task2
 
-    Para_Bert_NN_3 -> PPCA(n_components=len(paragraphs_embeddings)) -> KMeans(n_clusters=k, n_init=5), silhoutte score
+    KMeans
+    0.5510
+    0.2678
+    
+
+    PCA(n_components=len(paragraphs_embeddings)) -> KMeans(n_clusters=k, n_init=5), silhoutte score
         task2 F1 - 0.5484
         task3 F1 - 0.2676
 
-    Para_Bert_NN_3 -> PCA(n_components=2) -> KMeans(n_clusters=k, n_init=5), silhoutte score
+    PCA(n_components=2) -> KMeans(n_clusters=k, n_init=5), silhoutte score
         task2 F1 - 0.5360
         task3 F1 - 0.2989
 
-    Para_Bert_NN_3 -> AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="average"), silhoutte score
+    HIerachical
+    0.5498
+    0.2675
+
+    PCA -> HIerachical
+    0.5361
+    0.2979
+
+--
+    AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="average"), silhoutte score
         task2 F1 - 0.4980
         task3 F1 - 0.3419
 
-    Para_Bert_NN_3 -> AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="single"), silhoutte score
-        task2 F1 - 0.4980
+    AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="single"), silhoutte score
+        task2 F1 - 0.5140
         task3 F1 - 0.3342
+
+    AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="complete"), silhoutte score
+        task2 F1 - 0.4745
+        task3 F1 - 0.3412
+
+    AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="average"), silhoutte score
+        task2 F1 - 0.4689
+        task3 F1 - 0.3564
+
+        

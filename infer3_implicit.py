@@ -74,11 +74,11 @@ if __name__=="__main__":
             if k >= len(paragraphs_embeddings):
                 break
 
-            dimensionality_reduction = PCA(n_components=2)
-            paragraphs_embeddings = dimensionality_reduction.fit_transform(paragraphs_embeddings)
+            #dimensionality_reduction = PCA(n_components=2)
+            #paragraphs_embeddings = dimensionality_reduction.fit_transform(paragraphs_embeddings)
 
-            clusterer = KMeans(n_clusters=k, n_init=5)
-            #clusterer = AgglomerativeClustering(n_clusters=k)
+            #clusterer = KMeans(n_clusters=k, n_init=5)
+            clusterer = AgglomerativeClustering(n_clusters=k)
             predictions = clusterer.fit_predict(paragraphs_embeddings)
             score = silhouette_score(paragraphs_embeddings, predictions)
 

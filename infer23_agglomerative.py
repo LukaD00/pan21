@@ -3,14 +3,13 @@ import numpy as np
 
 from data import *
 from features import *
-from util import sort_group_names, clusters_to_changes
+from util import sort_group_names
 
 from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.mixture import GaussianMixture
 from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import pairwise_distances
-
 
 
 def myconverter(obj):
@@ -30,7 +29,7 @@ if __name__=="__main__":
     dataset_para = DocumentFeaturesDataset.load("features/Para_val_bert.joblib")
 
     classifier_docu = joblib.load("classifiers/Docu_Bert_NN_1.joblib")
-    classifier_para = joblib.load("classifiers/Para_Bert_NN_4.joblib")
+    classifier_para = joblib.load("classifiers/Para_Bert_NN_3.joblib")
 
     feature_extractor = DocumentBertEmbeddings()
 
@@ -58,6 +57,9 @@ if __name__=="__main__":
             solutions[instance.id]["paragraph-authors"] = [1] * p
             continue
 
+        predicted_changes = classifier_para.predict(instance.data).astype(np.int32).tolist()
+        solutions[instance.id]["changes"] = predicted_changes
+        
 
         # TASK 3 (ugly, I know)
         raw_dataset = dataset_para.raw_dataset
@@ -70,34 +72,57 @@ if __name__=="__main__":
         
         paragraphs_embeddings = [feature_extractor.extract(p) for p in paragraphs]
 
+        indexes_to_combine = []
+        current = [0]
+        for p_index in range(len(predicted_changes)):
+            if predicted_changes[p_index] == 0:
+                current.append(p_index+1)
+            else:
+                indexes_to_combine.append(current)
+                current = [p_index+1]
+        indexes_to_combine.append(current)
+
+        if len(indexes_to_combine) <= 1:
+            solutions[instance.id]["paragraph-authors"] = [1] * p
+            continue
+
+        paragraph_embeddings_combined = []
+        for index_set in indexes_to_combine:
+            paragraph_set = torch.zeros(768)
+            for index in index_set:
+                paragraph_set += paragraphs_embeddings[index]
+            paragraph_set /= len(index_set)
+            paragraph_embeddings_combined.append(paragraph_set.numpy())
+
+        sim = lambda x, y: classifier_para.predict_proba(((x+y)/2).reshape(1, -1))[0][1]
+        def sim_affinity(X):
+            return pairwise_distances(X, metric=sim)
+
+
         best_silhoutte = None
         best_attribution = None
         for k in [2,3,4,5]:
-            if k >= len(paragraphs_embeddings):
+            if k >= len(paragraph_embeddings_combined):
                 break
 
-            #dimensionality_reduction = PCA(n_components=2)
-            #paragraphs_embeddings = dimensionality_reduction.fit_transform(paragraphs_embeddings)
 
-            sim = lambda x, y: classifier_para.predict_proba(((x+y)/2).reshape(1, -1))[0][1]
-            def sim_affinity(X):
-                return pairwise_distances(X, metric=sim)
-
-            clusterer = AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="single")
-            predictions = clusterer.fit_predict(paragraphs_embeddings)
-            score = silhouette_score(paragraphs_embeddings, predictions)
+            clusterer = AgglomerativeClustering(n_clusters=k, metric=sim_affinity, linkage="average")
+            predictions = clusterer.fit_predict(paragraph_embeddings_combined)
+            score = silhouette_score(paragraph_embeddings_combined, predictions)
 
             if best_silhoutte is None or score > best_silhoutte:
                 best_silhoutte = score
                 best_attribution = predictions
 
-        if len(paragraphs_embeddings) == 2:
+        if len(paragraph_embeddings_combined) == 2:
             best_attribution = [0,1]
 
-        final_attribution = sort_group_names(best_attribution)
+        final_attribution = []
+        for i in range(len(best_attribution)):
+            final_attribution += [best_attribution[i]] * len(indexes_to_combine[i])
+        final_attribution = sort_group_names(final_attribution)
 
         solutions[instance.id]["paragraph-authors"] = final_attribution
-        solutions[instance.id]["changes"] = clusters_to_changes(final_attribution)
         
 
 

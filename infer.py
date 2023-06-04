@@ -1,8 +1,6 @@
-import joblib
 import numpy as np
 
 from data import *
-from features import *
 
 
 def myconverter(obj):
@@ -14,15 +12,15 @@ def myconverter(obj):
         return obj.tolist()
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
-    output_path = 'out/' 
+    output_path = 'out/'
 
     dataset_docu = DocumentFeaturesDataset.load("features/Docu_val_bert.joblib")
     dataset_para = DocumentFeaturesDataset.load("features/Para_val_bert.joblib")
 
-    classifier_docu = joblib.load("classifiers/Docu_Bert_NN_4.joblib")
-    classifier_para = joblib.load("classifiers/Para_Bert_NN_5.joblib")
+    classifier_docu = joblib.load("classifiers/Docu_Bert_NN_3.joblib")
+    classifier_para = joblib.load("classifiers/Para_Bert_NN_3.joblib")
 
     solutions = {}
 
@@ -40,6 +38,6 @@ if __name__=="__main__":
 
     print(f"Saving results to {output_path}")
     for id in solutions:
-        file_name = output_path+'solution-problem-'+id+'.json'
+        file_name = output_path + 'solution-problem-' + id + '.json'
         with open(file_name, 'w') as file_handle:
             json.dump(solutions[id], file_handle, default=myconverter)

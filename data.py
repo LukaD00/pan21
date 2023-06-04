@@ -1,10 +1,14 @@
 from __future__ import annotations
-import os
+
 import json
+import os
+
 import joblib
 
 from features import DocumentFeatures, ParagraphFeatures
-from features import DocumentBertEmbeddings, ParagraphBertEmbeddings
+from features import ParagraphBertEmbeddings
+from util import calculate_data_statistics, plot_paragraphs_distributions, count_paragraphs
+
 
 class Instance:
 
@@ -15,6 +19,7 @@ class Instance:
         self.paragraph_authors = paragraph_authors
         self.id = id
 
+
 class RawDataset:
 
     def __init__(self, path="data/train/"):
@@ -22,14 +27,13 @@ class RawDataset:
 
         for file_name in os.listdir(path):
             if file_name.endswith(".txt"):
-
                 id = file_name[8:-4]
                 truth_file_name = f"truth-problem-{id}.json"
 
-                with open(path+file_name, "r") as file:
+                with open(path + file_name, "r") as file:
                     text = file.read()
-                
-                with open(path+truth_file_name, "r") as file:
+
+                with open(path + truth_file_name, "r") as file:
                     data = json.load(file)
                     multi_author = data["multi-author"]
                     changes = data["changes"]
@@ -39,14 +43,14 @@ class RawDataset:
 
     def __getitem__(self, idx) -> Instance:
         return self.instances[idx]
-    
+
     def __len__(self):
         return len(self.instances)
 
 
 class DocumentFeaturesDataset:
 
-    def __init__(self, document_feature_extractor : DocumentFeatures, path="data/train/"):
+    def __init__(self, document_feature_extractor: DocumentFeatures, path="data/train/"):
         print("Loading Document features...")
 
         self.raw_dataset = RawDataset(path)
@@ -64,7 +68,7 @@ class DocumentFeaturesDataset:
                 raw_instance.paragraph_authors,
                 raw_instance.id
             )
-            
+
             self.instances.append(instance)
             self.ids.append(instance.id)
             self.X.append(instance.data)
@@ -74,10 +78,10 @@ class DocumentFeaturesDataset:
 
     def __getitem__(self, idx) -> Instance:
         return self.instances[idx]
-    
+
     def __len__(self):
         return len(self.instances)
-    
+
     def save(self, path):
         joblib.dump(self, path)
 
@@ -85,10 +89,9 @@ class DocumentFeaturesDataset:
         return joblib.load(path)
 
 
-
 class ParagraphFeaturesDataset:
 
-    def __init__(self, paragraph_feature_extractor : ParagraphFeatures, path="data/train/"):
+    def __init__(self, paragraph_feature_extractor: ParagraphFeatures, path="data/train/"):
         print("Loading Paragraph features...")
 
         self.raw_dataset = RawDataset(path)
@@ -116,10 +119,10 @@ class ParagraphFeaturesDataset:
 
     def __getitem__(self, idx) -> Instance:
         return self.instances[idx]
-    
+
     def __len__(self):
         return len(self.instances)
-    
+
     def save(self, path):
         joblib.dump(self, path)
 
@@ -127,9 +130,15 @@ class ParagraphFeaturesDataset:
         return joblib.load(path)
 
 
+if __name__ == "__main__":
+    # featureExtractor = ParagraphBertEmbeddings()
+    # dataset = ParagraphFeaturesDataset(featureExtractor, path="data/validation/")
+    # dataset.save("features/Para_val_bert.joblib")
 
+    paragraphs_train = count_paragraphs(RawDataset("data/train/"))
+    paragraphs_valid = count_paragraphs(RawDataset("data/validation/"))
 
-if __name__=="__main__":
-    featureExtractor = ParagraphBertEmbeddings()
-    dataset = ParagraphFeaturesDataset(featureExtractor, path="data/validation/")
-    dataset.save("features/Para_val_bert.joblib")
+    calculate_data_statistics(paragraphs_train, "train")
+    calculate_data_statistics(paragraphs_valid, "validation")
+
+    plot_paragraphs_distributions(paragraphs_train, paragraphs_valid)

@@ -3,9 +3,11 @@ import glob
 import json
 import os
 from itertools import chain
+
 from sklearn.metrics import f1_score
 
 EV_OUT = "evaluation.txt"
+
 
 def read_solution_files(solutions_folder):
     """
@@ -20,6 +22,7 @@ def read_solution_files(solutions_folder):
             solutions[os.path.basename(solution_file)[9:-5]] = curr_solution
     return solutions
 
+
 def read_ground_truth_files(truth_folder):
     """
     reads ground truth files into dict
@@ -32,6 +35,7 @@ def read_ground_truth_files(truth_folder):
             curr_truth = json.load(fh)
             truth[os.path.basename(truth_file)[6:-5]] = curr_truth
     return truth
+
 
 def extract_task_results(truth, solutions, task):
     """
@@ -52,6 +56,7 @@ def extract_task_results(truth, solutions, task):
             exit(0)
     return all_truth, all_solutions
 
+
 def compute_score_single_predictions(truth, solutions, key):
     """ compute f1 score for single prediction per document
     :param truth: list of ground truth values for all problem-ids
@@ -62,6 +67,7 @@ def compute_score_single_predictions(truth, solutions, key):
     truth, solution = extract_task_results(truth, solutions, key)
     return f1_score(truth, solution, average='macro')
 
+
 def compute_score_multiple_predictions(truth, solutions, key, labels):
     """ compute f1 score for task 2 and task 3 - list of predictions
     :param truth: list of ground truth values for all problem-ids
@@ -71,7 +77,9 @@ def compute_score_multiple_predictions(truth, solutions, key, labels):
     """
     task2_truth, task2_solution = extract_task_results(truth, solutions, key)
     # task 2 - lists have to be flattened first
-    return f1_score(list(chain.from_iterable(task2_truth)), list(chain.from_iterable(task2_solution)), average='macro', labels=labels)
+    return f1_score(list(chain.from_iterable(task2_truth)), list(chain.from_iterable(task2_solution)), average='macro',
+                    labels=labels)
+
 
 def write_output(filename, k, v):
     """
@@ -93,18 +101,18 @@ def main():
     parser.add_argument("-o", "--output", help="path to the dir to write the results to", default="eval")
     args = parser.parse_args()
 
-    solutions= read_solution_files(args.predictions)
+    solutions = read_solution_files(args.predictions)
     truth = read_ground_truth_files(args.truth)
 
     task1_result = compute_score_single_predictions(truth, solutions, 'multi-author')
     task2_results = compute_score_multiple_predictions(truth, solutions, 'changes', labels=[0, 1])
-    task3_results = compute_score_multiple_predictions(truth, solutions, 'paragraph-authors', labels=[1,2,3,4])
+    task3_results = compute_score_multiple_predictions(truth, solutions, 'paragraph-authors', labels=[1, 2, 3, 4])
 
     for k, v in {
         "task1_score": task1_result,
         "task2_score": task2_results,
         "task3_score": task3_results
-        }.items():
+    }.items():
         write_output(os.path.join(args.output, EV_OUT), k, v),
 
 

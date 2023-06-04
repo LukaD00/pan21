@@ -131,14 +131,15 @@ class ParagraphFeaturesDataset:
 
 
 if __name__ == "__main__":
-    # featureExtractor = ParagraphBertEmbeddings()
-    # dataset = ParagraphFeaturesDataset(featureExtractor, path="data/validation/")
-    # dataset.save("features/Para_val_bert.joblib")
+    featureExtractor = ParagraphBertEmbeddings()
+    dataset = ParagraphFeaturesDataset(featureExtractor, path="data/validation/")
+    dataset.save("features/Para_val_bert.joblib")
 
-    paragraphs_train = count_paragraphs(RawDataset("data/train/"))
-    paragraphs_valid = count_paragraphs(RawDataset("data/validation/"))
-
-    calculate_data_statistics(paragraphs_train, "train")
-    calculate_data_statistics(paragraphs_valid, "validation")
-
-    plot_paragraphs_distributions(paragraphs_train, paragraphs_valid)
+    # Uncomment for metrics
+    # paragraphs_train = count_paragraphs(RawDataset("data/train/"))
+    # paragraphs_valid = count_paragraphs(RawDataset("data/validation/"))
+    #
+    # calculate_data_statistics(paragraphs_train, "train")
+    # calculate_data_statistics(paragraphs_valid, "validation")
+    #
+    # plot_paragraphs_distributions(paragraphs_train, paragraphs_valid)
